@@ -2,8 +2,9 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
-
+#include <set>
 using std::vector;
+using std::set;
 
 /*
     Problem 1: Two pair with target sum
@@ -114,6 +115,7 @@ vector<int> MakeSquares(vector<int> & nums)
 
     int i=0;
     int j=nums.size()-1;
+    
 
     while(i<j)
     {
@@ -144,14 +146,75 @@ vector<int> MakeSquares(vector<int> & nums)
     
     return ans;
 }
+/*
+    Given an array of unsorted numbers, find all unique triplets in it that add up to zero.
+
+    Example 1:
+
+    Input: [-3, 0, 1, 2, -1, 1, -2]
+    Output: [[-3, 1, 2], [-2, 0, 2], [-2, 1, 1], [-1, 0, 1]]
+    Explanation: There are four unique triplets whose sum is equal to zero. smallest sum.'
+    Example 2:
+
+    Input: [-5, 2, -1, -2, 3]
+    Output: [[-5, 2, 3], [-2, -1, 3]]
+    Explanation: There are two unique triplets whose sum is equal to zero.
+    Constraints:
+
+    3 <= arr.length <= 3000
+    -105 <= arr[i] <= 105
+
+    sorted = -3,-2,-1,0,1,1,2
+
+    i+j+k=0
+    j+k=-i
+
+*/
+vector<vector<int>> ThreeSum(vector<int> &nums)
+{
+    std::sort(nums.begin(),nums.end());
+    vector<vector<int>> ans;
+    
+    set<vector<int>> st;
+    
+    for(int i=0;i<nums.size()-1;i++)
+    {
+        int j=i+1;
+        int k = nums.size()-1;
+
+        while(j<k)
+        {
+            if(nums[j]+nums[k]==-nums[i])
+            {
+                if(st.find({nums[i],nums[j],nums[k]})==st.end())
+                {
+                    ans.push_back({nums[i],nums[j],nums[k]});
+                }
+                j++;
+                k--;
+                
+            }else if(nums[j]+nums[k]<-nums[i])
+            {
+                j++;
+            }else if(nums[j]+nums[k]>-nums[i])
+            {
+                k--;
+            }
+        }
+    }
+    return ans;
+}
 int main()
 {
-    vector<int> nums1 = {-7,-3,2,3,11};
-    vector<int> ans2 = MakeSquares(nums1);
+    vector<int> nums1 = {-1,0,1,2,-1,-4};
+    vector<vector<int>> ans = ThreeSum(nums1);
 
-    for(auto x:ans2)
+    for(auto x:ans)
     {
-        std::cout<<x<<std::endl;
+        for(auto y:x)
+        {
+            std::cout<<y<<std::endl;
+        }
     }
     return 0;
 }
