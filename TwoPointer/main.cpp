@@ -204,17 +204,124 @@ vector<vector<int>> ThreeSum(vector<int> &nums)
     }
     return ans;
 }
+
+/*
+    Given an array arr of unsorted numbers and a target sum, count all triplets in it such that arr[i] + arr[j] + arr[k] < target where i, j, and k are three different indices. Write a function to return the count of such triplets.
+
+    Example 1:
+
+    Input: [-1, 0, 2, 3], target=3 
+    Output: 2
+    Explanation: There are two triplets whose sum is less than the target: [-1, 0, 3], [-1, 0, 2]
+    Example 2:
+
+    Input: [-1, 4, 2, 1, 3], target=5 
+    Output: 4
+    Explanation: There are four triplets whose sum is less than the target: 
+    [-1, 1, 4], [-1, 1, 3], [-1, 1, 2], [-1, 2, 3]
+    Constraints:
+
+    n == arr.length
+    0 <= n <= 3500
+    -100 <= arr[i] <= 100
+    -100 <= target <= 100
+*/
+int threeSumClosest(vector<int>& nums, int target) {
+    sort(nums.begin(),nums.end());
+         
+    int minDiff = INT_MAX;
+    int minSum=INT_MAX;
+    for(int i=0;i<nums.size();i++)
+    {
+        int j=i+1;
+        int k = nums.size()-1;
+
+        while(j<k)
+        {
+            int sum = nums[i]+nums[j]+nums[k];
+            int diff = abs(target-sum);
+
+            if(diff<= minDiff)
+            {
+                minDiff=diff;
+                minSum = sum;
+            }
+            if(nums[j]+nums[k] +nums[i] == target)
+            {
+                return target;
+            }else if(nums[j]+nums[k]+nums[i]>target)
+            {
+                k--;
+            }else if(nums[j]+nums[k]+nums[i]<target)
+            {
+                j++;
+            }
+        }
+    }
+    return minSum;
+}
+/*
+    Given an array with positive numbers and a positive target number, find all of its contiguous subarrays whose product is less than the target number.
+
+    Example 1:
+
+    Input: [2, 5, 3, 10], target=30                                              
+    Output: [2], [5], [2, 5], [3], [5, 3], [10]                           
+    Explanation: There are six contiguous subarrays whose product is less than the target.
+    Example 2:
+
+    Input: [8, 2, 6, 5], target=50                                              
+    Output: [8], [2], [8, 2], [6], [2, 6], [5], [6, 5]                         
+    Explanation: There are seven contiguous subarrays whose product is less than the target.
+    Constraints:
+
+    1 <= arr.length <= 3 * 104
+    1 <= arr[i] <= 1000
+    0 <= k <= 106
+*/
+vector<vector<int>> findSubarrays(const vector<int>& arr, int target) {
+    vector<vector<int>> result;
+    if(target<=1)
+    {
+        return {};
+    }
+    int count =0;
+    int start=0;
+    int product=1;
+
+    for(int end=0;end<arr.size();end++)
+    {
+        product*=arr[end];
+
+        while(start<arr.size() && product>=target)
+        {
+            product/=arr[start];
+            start++;
+        }
+        vector<int> templist;
+
+        for(int i=end ; i>=start;i--)
+        {
+            templist.insert(templist.begin(),arr[i]);
+
+            result.push_back(templist);
+        }
+    }
+
+    return result;
+  }
 int main()
 {
-    vector<int> nums1 = {-1,0,1,2,-1,-4};
-    vector<vector<int>> ans = ThreeSum(nums1);
+    vector<int> nums1 = {2, 5, 3, 10};
+    vector<vector<int>> ans = findSubarrays(nums1,30);
 
     for(auto x:ans)
     {
         for(auto y:x)
         {
-            std::cout<<y<<std::endl;
+            std::cout<<y;
         }
+        std::cout<<std::endl;
     }
     return 0;
 }
