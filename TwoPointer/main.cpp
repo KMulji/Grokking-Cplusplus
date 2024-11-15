@@ -309,19 +309,125 @@ vector<vector<int>> findSubarrays(const vector<int>& arr, int target) {
     }
 
     return result;
-  }
+}
+/*
+    Given an array of unsorted numbers and a target number, find a triplet in the array whose sum is as close to the target number as possible, return the sum of the triplet. If there are more than one such triplet, return the sum of the triplet with the smallest sum.
+
+    Example 1:
+
+    Input: [-1, 0, 2, 3], target=3 
+    Output: 2
+    Explanation: There are two triplets with distance '1' from the target: [-1, 0, 3] & [-1, 2, 3]. Between these two triplets, the correct answer will be [-1, 0, 3] as it has a sum '2' which is less than the sum of the other triplet which is '4'. This is because of the following requirement: 'If there are more than one such triplet, return the sum of the triplet with the smallest sum.'
+    Example 2:
+
+    Input: [-3, -1, 1, 2], target=1
+    Output: 0
+    Explanation: The triplet [-3, 1, 2] has the closest sum to the target.
+    Example 3:
+
+    Input: [1, 0, 1, 1], target=100
+    Output: 3
+    Explanation: The triplet [1, 1, 1] has the closest sum to the target.
+    Example 4:
+
+    Input: [0, 0, 1, 1, 2, 6], target=5
+    Output: 4
+    Explanation: There are two triplets with distance '1' from target: [1, 1, 2] & [0, 0, 6]. Between these two triplets, the correct answer will be [1, 1, 2] as it has a sum '4' which is less than the sum of the other triplet which is '6'. This is because of the following requirement: 'If there are more than one such triplet, return the sum of the triplet with the smallest sum.'
+    Constraints:
+
+    3 <= arr.length <= 500
+    -1000 <= arr[i] <= 1000
+    -104 <= target <= 104
+*/
+int TripletsWithSmallerSum(vector<int> & nums,int target)
+{
+    std::sort(nums.begin(),nums.end());
+    int count=0;
+    for(int i=0;i<nums.size();i++)
+    {
+        int j=i+1;
+        int k = nums.size()-1;
+
+        while(j<k)
+        {
+            if(nums[j]+nums[k]<target-nums[i])
+            {
+                count+=k-j;
+                j++;
+            }else
+            {
+                k--;
+            }
+        }
+    }
+    return count;
+
+}
+/*
+    Given an array containing 0s, 1s and 2s, sort the array in-place. You should treat numbers of the array as objects, hence, we can’t count 0s, 1s, and 2s to recreate the array.
+
+    The flag of the Netherlands consists of three colors: red, white and blue; and since our input array also consists of three different numbers that is why it is called Dutch National Flag problem.
+
+    Example 1:
+
+    Input: [1, 0, 2, 1, 0]
+    Output: [0 0 1 1 2]
+    Example 2:
+
+    Input: [2, 2, 0, 1, 2, 0]
+    Output: [0 0 1 2 2 2 ]
+    Constraints:
+
+    n == arr.length
+    1 <= n <= 300
+    arr[i] is either 0, 1, or 2.
+*/
+void Swap(int * a, int *b)
+{
+    int temp = *a;
+    *a=*b;
+    *b=temp;
+}
+vector<int> DutchProblem(vector<int> &nums)
+{
+    int left=0;
+    int right = nums.size()-1;
+    int i=0;
+    while(i<=right)
+    {
+        if(nums[i]==0)
+        {
+            int temp = nums[i];
+            nums[i]=nums[left];
+            nums[left]=temp;
+            i++;
+            left++;
+        }
+        else if(nums[i]==1)
+        {
+            i++;
+        }else
+        {
+            int temp = nums[i];
+            nums[i]=nums[right];
+            nums[right]=temp;
+            right--;
+        }
+    }
+    return nums;
+}
+
 int main()
 {
-    vector<int> nums1 = {2, 5, 3, 10};
-    vector<vector<int>> ans = findSubarrays(nums1,30);
+    vector<int> nums1 = {2, 2, 0, 1, 2, 0};
+    vector<int> ans = DutchProblem(nums1);
 
     for(auto x:ans)
     {
-        for(auto y:x)
-        {
-            std::cout<<y;
-        }
-        std::cout<<std::endl;
+        std::cout<<x<<std::endl;
     }
+    
+
+    
     return 0;
 }
