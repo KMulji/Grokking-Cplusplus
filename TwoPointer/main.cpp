@@ -1,10 +1,14 @@
 #include <iostream>
+#include <stack>
 #include <vector>
 #include <algorithm>
 #include <cmath>
 #include <set>
+#include <string>
 using std::vector;
 using std::set;
+using std::stack;
+using std::string;
 
 /*
     Problem 1: Two pair with target sum
@@ -417,15 +421,75 @@ vector<int> DutchProblem(vector<int> &nums)
     return nums;
 }
 
+/*
+    Given two strings containing backspaces (identified by the character ‘#’), check if the two strings are equal.
+
+    Example 1:
+
+    Input: str1="xy#z", str2="xzz#"
+    Output: true
+    Explanation: After applying backspaces the strings become "xz" and "xz" respectively.
+    Example 2:
+
+    Input: str1="xy#z", str2="xyz#"
+    Output: false
+    Explanation: After applying backspaces the strings become "xz" and "xy" respectively.
+    Example 3:
+
+    Input: str1="xp#", str2="xyz##"
+    Output: true
+    Explanation: After applying backspaces the strings become "x" and "x" respectively.
+    In "xyz##", the first '#' removes the character 'z' and the second '#' removes the character 'y'.
+    Example 4:
+
+    Input: str1="xywrrmp", str2="xywrrmu#p"
+    Output: true
+    Explanation: After applying backspaces the strings become "xywrrmp" and "xywrrmp" respectively.
+    Constraints:
+
+    1 <= str1.length, str2.length <= 200
+    str1 and str2 only contain lowercase letters and '#' characters.
+*/
+static bool compare(const string &str1, const string &str2) {
+    // TODO: Write your code here
+    stack<char> s1;
+    stack<char> s2;
+
+
+    for(auto x:str1)
+    {
+        if(x!='#')
+        {
+            s1.push(x);
+        }else if(x=='#')
+        {
+            s1.pop();
+        }
+        
+    }
+
+    for(auto x:str2)
+    {
+        if(x!='#')
+        {
+            s2.push(x);
+        }else if(x=='#')
+        {
+            s2.pop();
+        }
+    }
+
+    return s1==s2;
+  }
+
 int main()
 {
-    vector<int> nums1 = {2, 2, 0, 1, 2, 0};
-    vector<int> ans = DutchProblem(nums1);
+    string s1 = "xy#z";
+    string s2 = "xzzx#";
 
-    for(auto x:ans)
-    {
-        std::cout<<x<<std::endl;
-    }
+    bool test = compare(s1,s2);
+
+    std::cout<<test<<std::endl;
     
 
     
